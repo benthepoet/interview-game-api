@@ -1,7 +1,6 @@
+using GameAPI.Services.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
-using GameAPI.Services.DTOs;
 
 namespace GameAPI.Controllers
 {
