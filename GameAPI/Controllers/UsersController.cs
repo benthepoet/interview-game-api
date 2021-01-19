@@ -1,6 +1,10 @@
-using GameAPI.Services.DTOs;
+using GameAPI.Models;
+using GameAPI.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace GameAPI.Controllers
 {
@@ -8,29 +12,47 @@ namespace GameAPI.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly ILogger<UsersController> _logger;
+        private readonly IUserService _service;
 
-        public UsersController(ILogger<UsersController> logger)
+        public UsersController(IUserService service)
         {
-            _logger = logger;
+            _service = service;
         }
 
         [HttpPost]
-        public UserDTO PostUser()
+        public IActionResult PostUser()
         {
-            return null;
+            var user = _service.CreateUser();
+            var uri = $"{Request.GetDisplayUrl()}/{user.UserId}";
+            return Created(uri, user);
         } 
 
         [HttpGet("{id}")]
-        public UserDTO GetUser(int id)
+        public IActionResult GetUser(int id)
         {
-            return null;
+            var user = _service.GetUser(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
         }
 
         [HttpPost("{id}/games")]
-        public ActionResult PostGame(int id)
+        public IActionResult PostGame(int id, [FromBody] PostGameRequest gameRequest)
         {
-            return null;
+            var user = _service.GetUser(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _service.AddGame(id, gameRequest.GameId);
+
+            return NoContent();
         }
 
         [HttpDelete("{id}/games/{gameId}")]
@@ -44,5 +66,10 @@ namespace GameAPI.Controllers
         {
             return null;
         } 
+
+        public class PostGameRequest
+        {
+            public int GameId { get; set; }
+        }
     }
 }

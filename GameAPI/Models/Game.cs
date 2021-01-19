@@ -1,8 +1,13 @@
-namespace GameAPI.Services.DTOs
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace GameAPI.Models
 {
-    public class GameDTO
+    public class Game
     {
-        public int GameId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int Added { get; set; }
         public int Metacritic { get; set; }

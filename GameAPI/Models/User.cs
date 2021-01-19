@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace GameAPI.Data.Repositories
+namespace GameAPI.Models
 {
-    public class UserRecord
+    public class User
     {
         public int Id { get; set; }
         public HashSet<int> GameIds { get; set; }

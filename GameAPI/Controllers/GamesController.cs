@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using GameAPI.Services.DTOs;
+using GameAPI.Models;
 
 namespace GameAPI.Controllers
 {

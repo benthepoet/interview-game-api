@@ -1,18 +1,19 @@
-﻿using System;
+﻿using GameAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GameAPI.Data.RAWG
+namespace GameAPI.Data
 {
     public class RAWGClient : IRAWGClient
     {
-        public GameRecord GetGame(int id)
+        public Game GetGame(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<GameRecord> ListGames(string q, string sort)
+        public IEnumerable<Game> ListGames(string search, string sort)
         {
             throw new NotImplementedException();
         }

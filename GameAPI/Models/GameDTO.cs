@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace GameAPI.Data.RAWG
+namespace GameAPI.Models
 {
-    public class GameRecord
+    public class GameDTO
     {
-        public int Id { get; set; }
+        public int GameId { get; set; }
         public string Name { get; set; }
         public int Added { get; set; }
         public int Metacritic { get; set; }
