@@ -18,9 +18,15 @@ namespace GameAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<GameDTO>> GetGames(string q, string sort)
+        public async Task<IActionResult> GetGames(string q, string sort)
         {
-            return await _service.ListGames(q, sort);
+            if (string.IsNullOrEmpty(q))
+            {
+                return BadRequest("The 'q' parameter is required and cannot be empty.");
+            }
+
+            var games = await _service.ListGames(q, sort);
+            return Ok(games);
         }
     }
 }

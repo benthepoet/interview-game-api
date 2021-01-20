@@ -51,20 +51,10 @@ namespace GameAPI.Controllers
         }
 
         [HttpPost("{userId}/comparison")]
-        public IActionResult PostUserComparison(int userId, 
+        public async Task<IActionResult> PostUserComparison(int userId, 
             [FromBody] PostUserComparisonRequest comparisonRequest)
         {
-            UserComparisonDTO comparison;
-
-            try
-            {
-                comparison = _service.GetComparison(userId, comparisonRequest.OtherUserId, comparisonRequest.Comparison);
-            }
-            catch (ArgumentException e)
-            {
-                return BadRequest(e.Message);
-            }
-
+            var comparison = await _service.GetComparison(userId, comparisonRequest.OtherUserId, comparisonRequest.Comparison);
             return Ok(comparison);
         } 
 

@@ -32,7 +32,10 @@ namespace GameAPI.Data
         {
             if (_storage.ContainsKey(id))
             {
-                return _storage[id];
+                var user = _storage[id];
+                
+                // Return a deep clone so we're not passing a reference to the stored object
+                return user.Clone();
             }
 
             return null;

@@ -6,6 +6,9 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Text.RegularExpressions;
+using GameAPI.Exceptions;
 
 namespace GameAPI.Data
 {
@@ -13,21 +16,25 @@ namespace GameAPI.Data
     {
         private readonly string _apiKey;
         private readonly string _baseUrl;
-        private readonly HttpClient _httpClient;
         private readonly IAsyncPolicy<Game> _cachePolicy;
+        private readonly HttpClient _httpClient;
 
-        public RAWGClient(IConfiguration configuration, IReadOnlyPolicyRegistry<string> policyRegistry)
+        private readonly string[] SORT_FIELDS = { 
+            "name",
+            "released",
+            "added",
+            "created",
+            "updated",
+            "rating",
+            "metacritic"
+        };
+
+        public RAWGClient(IConfiguration configuration, IReadOnlyPolicyRegistry<string> policyRegistry, HttpClient httpClient)
         {
             _apiKey = configuration.GetValue<string>("RAWG:ApiKey");
             _baseUrl = configuration.GetValue<string>("RAWG:BaseUrl");
-            _httpClient = new HttpClient();
-            _cachePolicy = policyRegistry.Get<IAsyncPolicy<Game>>("myCachePolicy");
-        }
-
-        private string BuildUri(string resource, string query = "")
-        {
-            var uri = new UriBuilder($"{_baseUrl}/{resource}?key={_apiKey}&{query}");
-            return uri.ToString();
+            _cachePolicy = policyRegistry.Get<IAsyncPolicy<Game>>("gameCachePolicy");
+            _httpClient = httpClient;
         }
 
         public async Task<Game> GetGame(int gameId)
@@ -40,10 +47,48 @@ namespace GameAPI.Data
             }, new Context(uri));
         }
 
-        public async Task<GameList> ListGames(string search, string sort)
+        public async Task<GameList> ListGames(string search, string sort = "")
         {
             var uri = BuildUri("games", $"search={search}");
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                if (!IsSortValid(sort))
+                {
+                    throw new InvalidParameterException($"'{sort}' is not a valid sort parameter");
+                }
+
+                uri += $"&ordering={sort}";
+            }
+
             return await _httpClient.GetFromJsonAsync<GameList>(uri);
+        }
+
+        private string BuildUri(string resource, string query = "")
+        {
+            var uri = new UriBuilder($"{_baseUrl}/{resource}?key={_apiKey}&{query}");
+            return uri.ToString();
+        }
+
+        private bool IsSortValid(string sort) 
+        {
+            var pattern = @"^[-]*(?<field>\w+)$";
+            var regex = new Regex(pattern);
+
+            var match = regex.Match(sort);
+            if (match == null)
+            {
+                return false;
+            }
+
+            var field = match.Groups["field"];
+
+            if (!SORT_FIELDS.Contains(field.Value))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

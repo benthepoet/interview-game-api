@@ -33,16 +33,20 @@ namespace GameAPI
 
             services.AddSingleton<IReadOnlyPolicyRegistry<string>, PolicyRegistry>((serviceProvider) =>
             {
+                // Set game cache TTL in minutes
+                var gameCacheTTL = TimeSpan.FromMinutes(Configuration.GetValue<int>("RAWG:GameCacheTTL"));
+                
                 var registry = new PolicyRegistry();
-                registry.Add("myCachePolicy",
+                registry.Add("gameCachePolicy",
                     Policy.CacheAsync(
                         serviceProvider
                             .GetRequiredService<IAsyncCacheProvider>()
                             .AsyncFor<Game>(),
-                        TimeSpan.FromMinutes(5)));
+                        gameCacheTTL));
                 return registry;
             });
 
+            services.AddTransient<HttpClient>();
             services.AddSingleton<IRAWGClient, RAWGClient>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IGameService, GameService>();

@@ -82,7 +82,7 @@ namespace GameAPI.Services
             _repository.UpdateUser(user);
         }
 
-        public UserComparisonDTO GetComparison(int userId, int otherUserId, string comparison)
+        public async Task<UserComparisonDTO> GetComparison(int userId, int otherUserId, string comparison)
         {
             var user = _repository.GetUser(userId);
 
@@ -100,7 +100,7 @@ namespace GameAPI.Services
 
             // Create a new hash set for output as the methods below mutate the data structure
             HashSet<int> gameIds;
-            
+
             switch (comparison)
             {
                 case COMPARISON_DIFFERENCE:
@@ -122,17 +122,14 @@ namespace GameAPI.Services
                     throw new InvalidParameterException($"'{comparison}' is not a valid comparison.");
             }
 
+            var games = await ConvertGameIdsToGameDTOs(user.GameIds);
+
             return new UserComparisonDTO
             {
                 UserId = user.Id,
                 OtherUserId = otherUser.Id,
                 Comparison = comparison,
-                Games = gameIds
-                    .Select(x => new GameDTO
-                    {
-                        GameId = x
-                    })
-                    .ToArray()
+                Games = games
             };
         }
 
@@ -145,18 +142,25 @@ namespace GameAPI.Services
                 throw new EntityNotFoundException($"User {userId} does not exist.");
             }
 
-            var games = new List<GameDTO>();
-
-            foreach (var gameId in user.GameIds)
-            {
-                games.Add(await _gameService.GetGame(gameId));
-            }
+            var games = await ConvertGameIdsToGameDTOs(user.GameIds);
 
             return new UserDTO
             {
                 UserId = user.Id,
                 Games = games
             };
+        }
+
+        private async Task<List<GameDTO>> ConvertGameIdsToGameDTOs(HashSet<int> gameIds)
+        {
+            var games = new List<GameDTO>();
+
+            foreach (var gameId in gameIds)
+            {
+                games.Add(await _gameService.GetGame(gameId));
+            }
+
+            return games;
         }
     }
 }
