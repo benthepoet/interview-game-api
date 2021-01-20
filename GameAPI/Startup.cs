@@ -21,7 +21,9 @@ namespace GameAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<IRAWGClient, RAWGClient>();
             services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IGameService, GameService>();
             services.AddSingleton<IUserService, UserService>();
         }
 
@@ -30,7 +32,7 @@ namespace GameAPI
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/error-local-development");
             }
             else
             {

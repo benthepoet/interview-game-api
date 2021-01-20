@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using GameAPI.Models.DTOs;
+using GameAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
-using GameAPI.Models;
+using System.Collections.Generic;
 
 namespace GameAPI.Controllers
 {
@@ -10,17 +9,17 @@ namespace GameAPI.Controllers
     [Route("[controller]")]
     public class GamesController : ControllerBase
     {
-        private readonly ILogger<GamesController> _logger;
+        private readonly IGameService _service;
 
-        public GamesController(ILogger<GamesController> logger)
+        public GamesController(IGameService service)
         {
-            _logger = logger;
+            _service = service;
         }
 
         [HttpGet]
-        public IEnumerable<GameDTO> GetGames()
+        public IEnumerable<GameDTO> GetGames(string q, string sort)
         {
-            return null;
+            return _service.ListGames(q, sort);
         }
     }
 }

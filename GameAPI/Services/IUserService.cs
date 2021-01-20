@@ -1,4 +1,4 @@
-using GameAPI.Models;
+using GameAPI.Models.DTOs;
 
 namespace GameAPI.Services
 {

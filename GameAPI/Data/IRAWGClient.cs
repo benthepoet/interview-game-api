@@ -5,7 +5,7 @@ namespace GameAPI.Data
 {
     interface IRAWGClient
     {
-        Game GetGame(int id);
+        Game GetGame(int gameId);
         IEnumerable<Game> ListGames(string search, string sort);
     }
 }
