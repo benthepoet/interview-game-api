@@ -38,7 +38,7 @@ namespace GameAPI
                     Policy.CacheAsync(
                         serviceProvider
                             .GetRequiredService<IAsyncCacheProvider>()
-                            .AsyncFor<GameList>(),
+                            .AsyncFor<Game>(),
                         TimeSpan.FromMinutes(5)));
                 return registry;
             });

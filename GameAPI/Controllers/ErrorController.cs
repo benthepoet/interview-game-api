@@ -34,21 +34,23 @@ namespace GameAPI.Controllers
             }
 
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
-            var statusCode = GetStatusCode(context.Error);
+            var exception = context.Error;
+            var statusCode = GetStatusCode(exception);
 
             return Problem(
                 statusCode: (int)statusCode,
-                detail: context.Error.StackTrace,
-                title: context.Error.Message);
+                detail: exception.StackTrace,
+                title: exception.Message);
         }
 
         [Route("/error")]
         public IActionResult Error()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
-            var statusCode = GetStatusCode(context.Error);
+            var exception = context.Error;
+            var statusCode = GetStatusCode(exception);
 
-            return Problem(statusCode: (int)statusCode, title: context.Error.Message);
+            return Problem(statusCode: (int)statusCode, title: exception.Message);
         }
     }
 }

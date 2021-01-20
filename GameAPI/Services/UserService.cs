@@ -4,6 +4,7 @@ using GameAPI.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GameAPI.Services
 {
@@ -135,7 +136,7 @@ namespace GameAPI.Services
             };
         }
 
-        public UserDTO GetUser(int userId)
+        public async Task<UserDTO> GetUser(int userId)
         {
             var user = _repository.GetUser(userId);
             
@@ -144,15 +145,17 @@ namespace GameAPI.Services
                 throw new EntityNotFoundException($"User {userId} does not exist.");
             }
 
+            var games = new List<GameDTO>();
+
+            foreach (var gameId in user.GameIds)
+            {
+                games.Add(await _gameService.GetGame(gameId));
+            }
+
             return new UserDTO
             {
                 UserId = user.Id,
-                Games = user.GameIds
-                    .Select(x => new GameDTO
-                    {
-                        GameId = x
-                    })
-                    .ToArray()
+                Games = games
             };
         }
     }

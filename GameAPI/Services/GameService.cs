@@ -1,4 +1,5 @@
 ﻿using GameAPI.Data;
+using GameAPI.Models;
 using GameAPI.Models.DTOs;
 using System;
 using System.Linq;
@@ -15,9 +16,24 @@ namespace GameAPI.Services
             _client = client;
         }
 
-        public GameDTO GetGame(int gameId)
+        public GameDTO ConvertToGameDTO(Game game)
         {
-            throw new NotImplementedException();
+            return new GameDTO
+            {
+                GameId = game.Id,
+                Name = game.Name,
+                Added = game.Added,
+                Metacritic = game.Metacritic,
+                Rating = game.Rating,
+                Released = game.Released,
+                Updated = game.Updated
+            };
+        }
+
+        public async Task<GameDTO> GetGame(int gameId)
+        {
+            var game = await _client.GetGame(gameId);
+            return ConvertToGameDTO(game);
         }
 
         public async Task<GameDTO[]> ListGames(string search, string sort)
@@ -25,11 +41,7 @@ namespace GameAPI.Services
             var gameList = await _client.ListGames(search, sort);
 
             return gameList.Results
-                .Select(x => new GameDTO
-                {
-                    GameId = x.Id,
-                    Name = x.Name
-                })
+                .Select(game => ConvertToGameDTO(game))
                 .ToArray();
         }
     }

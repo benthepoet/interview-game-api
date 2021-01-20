@@ -3,6 +3,7 @@ using GameAPI.Services;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
 
 namespace GameAPI.Controllers
 {
@@ -26,15 +27,9 @@ namespace GameAPI.Controllers
         } 
 
         [HttpGet("{id}")]
-        public IActionResult GetUser(int id)
+        public async Task<IActionResult> GetUser(int id)
         {
-            var user = _service.GetUser(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
+            var user = await _service.GetUser(id);
             return Ok(user);
         }
 
