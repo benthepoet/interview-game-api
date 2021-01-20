@@ -1,6 +1,7 @@
 ﻿using GameAPI.Data;
 using GameAPI.Models.DTOs;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GameAPI.Services
@@ -21,8 +22,15 @@ namespace GameAPI.Services
 
         public async Task<GameDTO[]> ListGames(string search, string sort)
         {
-            await _client.ListGames(search, sort);
-            throw new NotImplementedException();
+            var gameList = await _client.ListGames(search, sort);
+
+            return gameList.Results
+                .Select(x => new GameDTO
+                {
+                    GameId = x.Id,
+                    Name = x.Name
+                })
+                .ToArray();
         }
     }
 }

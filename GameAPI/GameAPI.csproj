@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="polly" Version="7.2.1" />
+    <PackageReference Include="polly.Caching.Memory" Version="3.0.2" />
     <PackageReference Include="system.net.http.json" Version="5.0.0" />
   </ItemGroup>
 

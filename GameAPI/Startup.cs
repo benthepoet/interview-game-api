@@ -1,10 +1,16 @@
 using GameAPI.Data;
+using GameAPI.Models;
 using GameAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Polly;
+using Polly.Caching;
+using Polly.Registry;
+using System;
+using System.Net.Http;
 
 namespace GameAPI
 {
@@ -21,6 +27,22 @@ namespace GameAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMemoryCache();
+
+            services.AddSingleton<Polly.Caching.IAsyncCacheProvider, Polly.Caching.Memory.MemoryCacheProvider>();
+
+            services.AddSingleton<Polly.Registry.IReadOnlyPolicyRegistry<string>, Polly.Registry.PolicyRegistry>((serviceProvider) =>
+            {
+                PolicyRegistry registry = new PolicyRegistry();
+                registry.Add("myCachePolicy",
+                    Policy.CacheAsync<GameList>(
+                        serviceProvider
+                            .GetRequiredService<IAsyncCacheProvider>()
+                            .AsyncFor<GameList>(),
+                        TimeSpan.FromMinutes(5)));
+                return registry;
+            });
+
             services.AddSingleton<IRAWGClient, RAWGClient>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IGameService, GameService>();
