@@ -19,7 +19,7 @@ namespace GameAPI.Data
         private readonly IAsyncPolicy<Game> _cachePolicy;
         private readonly HttpClient _httpClient;
 
-        private readonly string[] SORT_FIELDS = { 
+        private static readonly string[] SORT_FIELDS = { 
             "name",
             "released",
             "added",
@@ -70,7 +70,7 @@ namespace GameAPI.Data
             return uri.ToString();
         }
 
-        private bool IsSortValid(string sort) 
+        public static bool IsSortValid(string sort) 
         {
             var pattern = @"^[-]*(?<field>\w+)$";
             var regex = new Regex(pattern);
