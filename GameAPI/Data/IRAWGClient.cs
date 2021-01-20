@@ -1,11 +1,12 @@
 ﻿using GameAPI.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GameAPI.Data
 {
-    interface IRAWGClient
+    public interface IRAWGClient
     {
-        Game GetGame(int gameId);
-        IEnumerable<Game> ListGames(string search, string sort);
+        Task<Game> GetGame(int gameId);
+        Task<GameList> ListGames(string search, string sort);
     }
 }

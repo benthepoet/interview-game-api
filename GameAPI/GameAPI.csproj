@@ -2,7 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>890e7d5f-1b87-4199-b3db-8c88a725b276</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="system.net.http.json" Version="5.0.0" />
+  </ItemGroup>
 
 
 </Project>

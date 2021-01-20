@@ -2,6 +2,7 @@
 using GameAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GameAPI.Controllers
 {
@@ -17,9 +18,9 @@ namespace GameAPI.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<GameDTO> GetGames(string q, string sort)
+        public async Task<IEnumerable<GameDTO>> GetGames(string q, string sort)
         {
-            return _service.ListGames(q, sort);
+            return await _service.ListGames(q, sort);
         }
     }
 }
