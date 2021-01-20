@@ -23,7 +23,7 @@ namespace GameAPI.Services
             _gameService = gameService;
         }
 
-        public void AddGame(int userId, int gameId)
+        public async Task AddGame(int userId, int gameId)
         {
             var user = _repository.GetUser(userId);
 
@@ -32,7 +32,7 @@ namespace GameAPI.Services
                 throw new EntityNotFoundException($"User {userId} does not exist.");
             }
 
-            var game = _gameService.GetGame(gameId);
+            var game = await _gameService.GetGame(gameId);
 
             if (game == null)
             {

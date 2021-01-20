@@ -34,10 +34,10 @@ namespace GameAPI.Controllers
         }
 
         [HttpPost("{userId}/games")]
-        public IActionResult PostUserGame(int userId, 
+        public async Task<IActionResult> PostUserGame(int userId, 
             [FromBody] PostGameRequest gameRequest)
         {
-            _service.AddGame(userId, gameRequest.GameId);
+            await _service.AddGame(userId, gameRequest.GameId);
 
             return NoContent();
         }

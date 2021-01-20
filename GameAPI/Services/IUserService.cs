@@ -7,7 +7,7 @@ namespace GameAPI.Services
     {
         UserDTO CreateUser();
         Task<UserDTO> GetUser(int userId);
-        void AddGame(int userId, int gameId);
+        Task AddGame(int userId, int gameId);
         void DeleteGame(int userId, int gameId);
         UserComparisonDTO GetComparison(int userId, int otherUserId, string comparison);
     }
