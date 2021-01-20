@@ -14,8 +14,7 @@ This project requires the following prerequisites.
 In order to use the API you must first obtain an API key from RAWG ([link](https://rawg.io/)) as their service is 
 used to retrieve game details.
 
-For testing the RAWG API key can be set in the user secrets file as below. User secrets are only available in 
-development and are not included in the project files.
+For testing the RAWG API key can be set in the user secrets file ([link](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows)) as below. User secrets should only be used in development and are not included in the project files.
 
 ```json
 {
@@ -25,7 +24,7 @@ development and are not included in the project files.
 }
 ```
 
-In a production deployment this key can be set using an environment variable named `RAWG:ApiKey`.
+In a production deployment this key can be set using an environment variable named `RAWG__ApiKey`.
 
 ### Caching
 In order to reduce redundant calls to the RAWG API and provide a better user experience, game details are cached 
