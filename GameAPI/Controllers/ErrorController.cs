@@ -25,7 +25,7 @@ namespace GameAPI.Controllers
 
         [Route("/error-local-development")]
         public IActionResult ErrorLocalDevelopment(
-        [FromServices] IWebHostEnvironment webHostEnvironment)
+            [FromServices] IWebHostEnvironment webHostEnvironment)
         {
             if (webHostEnvironment.EnvironmentName != "Development")
             {

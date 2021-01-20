@@ -29,13 +29,13 @@ namespace GameAPI
             services.AddControllers();
             services.AddMemoryCache();
 
-            services.AddSingleton<Polly.Caching.IAsyncCacheProvider, Polly.Caching.Memory.MemoryCacheProvider>();
+            services.AddSingleton<IAsyncCacheProvider, Polly.Caching.Memory.MemoryCacheProvider>();
 
-            services.AddSingleton<Polly.Registry.IReadOnlyPolicyRegistry<string>, Polly.Registry.PolicyRegistry>((serviceProvider) =>
+            services.AddSingleton<IReadOnlyPolicyRegistry<string>, PolicyRegistry>((serviceProvider) =>
             {
-                PolicyRegistry registry = new PolicyRegistry();
+                var registry = new PolicyRegistry();
                 registry.Add("myCachePolicy",
-                    Policy.CacheAsync<GameList>(
+                    Policy.CacheAsync(
                         serviceProvider
                             .GetRequiredService<IAsyncCacheProvider>()
                             .AsyncFor<GameList>(),
