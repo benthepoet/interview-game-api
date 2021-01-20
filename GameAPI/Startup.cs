@@ -27,8 +27,7 @@ namespace GameAPI
             services.AddMemoryCache();
             services.AddSingleton<IAsyncCacheProvider, Polly.Caching.Memory.MemoryCacheProvider>();
 
-            services.AddTransient<HttpClient>();
-            services.AddSingleton<IRAWGClient, RAWGClient>();
+            services.AddHttpClient<IRAWGClient, RAWGClient>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IGameService, GameService>();
             services.AddSingleton<IUserService, UserService>();
