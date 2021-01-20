@@ -24,7 +24,7 @@ For testing the RAWG API key can be set in the user secrets file ([link](https:/
 }
 ```
 
-In a production deployment this key can be set using an environment variable named `RAWG__ApiKey`.
+In a production environment this key can be set using an environment variable named `RAWG__ApiKey`.
 
 ### Caching
 In order to reduce redundant calls to the RAWG API and provide a better user experience, game details are cached 
