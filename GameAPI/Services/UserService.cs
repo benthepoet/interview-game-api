@@ -122,7 +122,7 @@ namespace GameAPI.Services
                     throw new InvalidParameterException($"'{comparison}' is not a valid comparison.");
             }
 
-            var games = await ConvertGameIdsToGameDTOs(user.GameIds);
+            var games = await ConvertGameIdsToGameDTOs(gameIds);
 
             return new UserComparisonDTO
             {
