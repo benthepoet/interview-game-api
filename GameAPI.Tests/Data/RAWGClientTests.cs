@@ -1,5 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GameAPI.Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GameAPI.Tests
 {
