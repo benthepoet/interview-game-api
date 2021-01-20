@@ -27,24 +27,9 @@ namespace GameAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddMemoryCache();
-
             services.AddSingleton<IAsyncCacheProvider, Polly.Caching.Memory.MemoryCacheProvider>();
-
-            services.AddSingleton<IReadOnlyPolicyRegistry<string>, PolicyRegistry>((serviceProvider) =>
-            {
-                // Set game cache TTL in minutes
-                var gameCacheTTL = TimeSpan.FromMinutes(Configuration.GetValue<int>("RAWG:GameCacheTTL"));
-                
-                var registry = new PolicyRegistry();
-                registry.Add("gameCachePolicy",
-                    Policy.CacheAsync(
-                        serviceProvider
-                            .GetRequiredService<IAsyncCacheProvider>()
-                            .AsyncFor<Game>(),
-                        gameCacheTTL));
-                return registry;
-            });
 
             services.AddTransient<HttpClient>();
             services.AddSingleton<IRAWGClient, RAWGClient>();

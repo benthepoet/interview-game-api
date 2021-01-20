@@ -6,7 +6,7 @@ namespace GameAPI.Data
 {
     public interface IRAWGClient
     {
-        Task<Game> GetGame(int gameId);
-        Task<GameList> ListGames(string search, string sort);
+        Task<GameResponse> GetGame(int gameId);
+        Task<GamesResponse> ListGames(string search, string sort);
     }
 }

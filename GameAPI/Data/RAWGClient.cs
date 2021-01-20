@@ -1,14 +1,15 @@
-﻿using GameAPI.Models;
+﻿using GameAPI.Exceptions;
+using GameAPI.Models;
 using Microsoft.Extensions.Configuration;
 using Polly;
-using Polly.Registry;
+using Polly.Caching;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Text.RegularExpressions;
-using GameAPI.Exceptions;
+using System.Threading.Tasks;
 
 namespace GameAPI.Data
 {
@@ -16,7 +17,8 @@ namespace GameAPI.Data
     {
         private readonly string _apiKey;
         private readonly string _baseUrl;
-        private readonly IAsyncPolicy<Game> _cachePolicy;
+        private readonly IAsyncPolicy<GameResponse> _gamePolicy;
+        private readonly IAsyncPolicy<GamesResponse> _gamesPolicy;
         private readonly HttpClient _httpClient;
 
         private static readonly string[] SORT_FIELDS = { 
@@ -29,25 +31,42 @@ namespace GameAPI.Data
             "metacritic"
         };
 
-        public RAWGClient(IConfiguration configuration, IReadOnlyPolicyRegistry<string> policyRegistry, HttpClient httpClient)
+        public RAWGClient(IConfiguration configuration, IAsyncCacheProvider cacheProvider, HttpClient httpClient)
         {
             _apiKey = configuration.GetValue<string>("RAWG:ApiKey");
             _baseUrl = configuration.GetValue<string>("RAWG:BaseUrl");
-            _cachePolicy = policyRegistry.Get<IAsyncPolicy<Game>>("gameCachePolicy");
             _httpClient = httpClient;
+
+            var retryPolicy = Policy
+                .Handle<HttpRequestException>()
+                .WaitAndRetryAsync(new [] { 
+                    TimeSpan.FromSeconds(1),
+                    TimeSpan.FromSeconds(2),
+                });
+
+            // Game requests have caching and retry for fault tolerance
+            _gamePolicy = Policy
+                .WrapAsync(
+                    Policy.CacheAsync(
+                        cacheProvider, 
+                        TimeSpan.FromMinutes(configuration.GetValue<int>("RAWG:GameCacheTTL"))), 
+                    retryPolicy)
+                .AsAsyncPolicy<GameResponse>();
+
+            // Games requests have just retry for fault tolerance
+            _gamesPolicy = retryPolicy.AsAsyncPolicy<GamesResponse>();
         }
 
-        public async Task<Game> GetGame(int gameId)
+        public async Task<GameResponse> GetGame(int gameId)
         {
             var uri = BuildUri($"games/{gameId}");
 
-            return await _cachePolicy.ExecuteAsync(async (context) =>
-            {
-                return await _httpClient.GetFromJsonAsync<Game>(uri);
-            }, new Context(uri));
+            return await _gamePolicy.ExecuteAsync(
+                async (context) => await _httpClient.GetFromJsonAsync<GameResponse>(uri), 
+                new Context(uri));
         }
 
-        public async Task<GameList> ListGames(string search, string sort = "")
+        public async Task<GamesResponse> ListGames(string search, string sort = "")
         {
             var uri = BuildUri("games", $"search={search}");
 
@@ -61,7 +80,8 @@ namespace GameAPI.Data
                 uri += $"&ordering={sort}";
             }
 
-            return await _httpClient.GetFromJsonAsync<GameList>(uri);
+            return await _gamesPolicy.ExecuteAsync(
+                async () => await _httpClient.GetFromJsonAsync<GamesResponse>(uri));
         }
 
         private string BuildUri(string resource, string query = "")

@@ -16,7 +16,7 @@ namespace GameAPI.Services
             _client = client;
         }
 
-        public GameDTO ConvertToGameDTO(Game game)
+        public GameDTO ConvertToGameDTO(GameResponse game)
         {
             return new GameDTO
             {

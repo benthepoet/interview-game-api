@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GameAPI.Models
 {
-    public class Game
+    public class GameResponse
     {
         public int Id { get; set; }
         public string Name { get; set; }
