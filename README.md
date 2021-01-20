@@ -29,12 +29,12 @@ In a production deployment this key can be set using an environment variable nam
 
 ### Caching
 In order to reduce redundant calls to the RAWG API and provide a better user experience, game details are cached 
-in memory. The default TTL (time-to-live) for cached game details is 10 minutes. This can be adjusted in `appsettings.json` file.
+in memory. The default TTL (time-to-live) for cached game details is 10 minutes. This can be adjusted in `appsettings.json` file as below.
 
 ```json
 {
   "RAWG": {
-    "GameCacheTTL": 60 // Cache game details for 60 minutes
+    "GameCacheTTL": 60
   }
 }
 ```
