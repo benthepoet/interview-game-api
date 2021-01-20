@@ -35,7 +35,7 @@ namespace GameAPI.Services
 
             if (game == null)
             {
-                throw new EntityNotFoundException($"Game {gameId} does not exist.");
+                throw new InvalidParameterException($"Game {gameId} does not exist.");
             }
 
             if (user.GameIds.Contains(gameId))
@@ -94,7 +94,7 @@ namespace GameAPI.Services
 
             if (otherUser == null)
             {
-                throw new ArgumentException($"User {otherUserId} does not exist.", "otherUserId");
+                throw new InvalidParameterException($"Other user {otherUserId} does not exist.");
             }
 
             // Create a new hash set for output as the methods below mutate the data structure
@@ -118,7 +118,7 @@ namespace GameAPI.Services
                     break;
 
                 default:
-                    throw new ArgumentException($"'{comparison}' is not a valid comparison.", "comparison");
+                    throw new InvalidParameterException($"'{comparison}' is not a valid comparison.");
             }
 
             return new UserComparisonDTO
