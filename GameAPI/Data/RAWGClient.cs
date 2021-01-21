@@ -5,6 +5,7 @@ using Polly;
 using Polly.Caching;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
@@ -20,6 +21,11 @@ namespace GameAPI.Data
         private readonly IAsyncPolicy<GamesResponse> _gamesPolicy;
         private readonly HttpClient _httpClient;
 
+        private const int DEFAULT_GAME_CACHE_TTL = 10;
+        private const string CONFIG_API_KEY = "RAWG:ApiKey";
+        private const string CONFIG_BASE_URL = "RAWG:BaseUrl";
+        private const string CONFIG_GAME_CACHE_TTL = "RAWG:GameCacheTTL";
+
         private static readonly string[] SORT_FIELDS = { 
             "name",
             "released",
@@ -32,10 +38,23 @@ namespace GameAPI.Data
 
         public RAWGClient(IConfiguration configuration, IAsyncCacheProvider cacheProvider, HttpClient httpClient)
         {
-            _apiKey = configuration.GetValue<string>("RAWG:ApiKey");
-            _baseUrl = configuration.GetValue<string>("RAWG:BaseUrl");
+            _apiKey = configuration.GetValue<string>(CONFIG_API_KEY);
+
+            if (string.IsNullOrEmpty(_apiKey))
+            {
+                throw new ArgumentNullException($"The configuration value '{CONFIG_API_KEY}' is not set.");
+            }
+
+            _baseUrl = configuration.GetValue<string>(CONFIG_BASE_URL);
+
+            if (string.IsNullOrEmpty(_baseUrl))
+            {
+                throw new ArgumentNullException($"The configuration value '{CONFIG_BASE_URL}' is not set.");
+            }
+
             _httpClient = httpClient;
 
+            // Build a basic retry policy
             var retryPolicy = Policy
                 .Handle<HttpRequestException>()
                 .WaitAndRetryAsync(new [] { 
@@ -43,12 +62,14 @@ namespace GameAPI.Data
                     TimeSpan.FromSeconds(2),
                 });
 
+            var gameCacheTTL = configuration.GetValue<int?>(CONFIG_GAME_CACHE_TTL) ?? DEFAULT_GAME_CACHE_TTL;
+
             // Game requests have caching and retry for fault tolerance
             _gamePolicy = Policy
                 .WrapAsync(
                     Policy.CacheAsync(
                         cacheProvider, 
-                        TimeSpan.FromMinutes(configuration.GetValue<int>("RAWG:GameCacheTTL"))), 
+                        TimeSpan.FromMinutes(gameCacheTTL)), 
                     retryPolicy)
                 .AsAsyncPolicy<GameResponse>();
 
@@ -61,7 +82,16 @@ namespace GameAPI.Data
             var uri = BuildUri($"games/{gameId}");
 
             return await _gamePolicy.ExecuteAsync(
-                async (context) => await _httpClient.GetFromJsonAsync<GameResponse>(uri), 
+                async (context) => {
+                    var response = await _httpClient.GetAsync(uri);
+                    
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return null;
+                    }
+
+                    return await response.Content.ReadFromJsonAsync<GameResponse>();
+                }, 
                 new Context(uri));
         }
 
@@ -85,7 +115,7 @@ namespace GameAPI.Data
 
         private string BuildUri(string resource, string query = "")
         {
-            var uri = new UriBuilder($"{_baseUrl}/{resource}?key={_apiKey}&{query}");
+            var uri = new UriBuilder($"{_baseUrl}/api/{resource}?key={_apiKey}&{query}");
             return uri.ToString();
         }
 

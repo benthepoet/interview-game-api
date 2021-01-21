@@ -32,6 +32,12 @@ namespace GameAPI.Services
         public async Task<GameDTO> GetGame(int gameId)
         {
             var game = await _client.GetGame(gameId);
+
+            if (game == null)
+            {
+                return null;
+            }
+
             return ConvertToGameDTO(game);
         }
 

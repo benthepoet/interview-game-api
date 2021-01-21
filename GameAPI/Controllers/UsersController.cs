@@ -2,7 +2,6 @@ using GameAPI.Models.DTOs;
 using GameAPI.Services;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace GameAPI.Controllers
@@ -27,10 +26,9 @@ namespace GameAPI.Controllers
         } 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<UserDTO> GetUser(int id)
         {
-            var user = await _service.GetUser(id);
-            return Ok(user);
+            return await _service.GetUser(id);
         }
 
         [HttpPost("{userId}/games")]
@@ -51,11 +49,10 @@ namespace GameAPI.Controllers
         }
 
         [HttpPost("{userId}/comparison")]
-        public async Task<IActionResult> PostUserComparison(int userId, 
+        public async Task<UserComparisonDTO> PostUserComparison(int userId, 
             [FromBody] PostUserComparisonRequest comparisonRequest)
         {
-            var comparison = await _service.GetComparison(userId, comparisonRequest.OtherUserId, comparisonRequest.Comparison);
-            return Ok(comparison);
+            return await _service.GetComparison(userId, comparisonRequest.OtherUserId, comparisonRequest.Comparison);
         } 
 
         public class PostGameRequest

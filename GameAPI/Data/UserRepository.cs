@@ -24,7 +24,7 @@ namespace GameAPI.Data
             _storage[user.Id] = user;
             _nextKey++;
 
-            return user;
+            return user.Clone();
         }
 
         public User GetUser(int id)
@@ -44,7 +44,7 @@ namespace GameAPI.Data
         {
             if (_storage.ContainsKey(user.Id))
             {
-                _storage[user.Id] = user;
+                _storage[user.Id] = user.Clone();
             }
         }
     }
