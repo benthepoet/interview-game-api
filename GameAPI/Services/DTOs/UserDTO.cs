@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GameAPI.Models.DTOs
+namespace GameAPI.Services.DTOs
 {
     public class UserDTO
     {

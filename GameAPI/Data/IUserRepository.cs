@@ -1,6 +1,4 @@
-﻿using GameAPI.Models;
-
-namespace GameAPI.Data
+﻿namespace GameAPI.Data
 {
     public interface IUserRepository
     {

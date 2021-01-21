@@ -1,7 +1,5 @@
-﻿using GameAPI.Models.DTOs;
-using GameAPI.Services;
+﻿using GameAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GameAPI.Controllers

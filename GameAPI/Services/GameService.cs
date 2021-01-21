@@ -1,6 +1,5 @@
-﻿using GameAPI.Data;
-using GameAPI.Models;
-using GameAPI.Models.DTOs;
+﻿using GameAPI.Data.RAWG;
+using GameAPI.Services.DTOs;
 using System.Linq;
 using System.Threading.Tasks;
 

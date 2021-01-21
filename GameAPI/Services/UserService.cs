@@ -1,6 +1,6 @@
 ﻿using GameAPI.Data;
 using GameAPI.Exceptions;
-using GameAPI.Models.DTOs;
+using GameAPI.Services.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

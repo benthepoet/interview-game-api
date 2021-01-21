@@ -1,7 +1,6 @@
-﻿using GameAPI.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace GameAPI.Data
+namespace GameAPI.Data.RAWG
 {
     public interface IRAWGClient
     {

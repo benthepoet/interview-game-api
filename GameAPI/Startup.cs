@@ -1,4 +1,5 @@
 using GameAPI.Data;
+using GameAPI.Data.RAWG;
 using GameAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

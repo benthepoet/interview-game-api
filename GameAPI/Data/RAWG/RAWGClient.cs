@@ -1,6 +1,4 @@
-﻿using GameAPI.Exceptions;
-using GameAPI.Models;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Polly;
 using Polly.Caching;
 using System;
@@ -11,7 +9,7 @@ using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace GameAPI.Data
+namespace GameAPI.Data.RAWG
 {
     public class RAWGClient : IRAWGClient
     {

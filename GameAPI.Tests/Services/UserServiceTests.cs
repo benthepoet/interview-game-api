@@ -1,7 +1,6 @@
 ﻿using GameAPI.Data;
-using GameAPI.Models;
-using GameAPI.Models.DTOs;
 using GameAPI.Services;
+using GameAPI.Services.DTOs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;

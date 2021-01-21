@@ -1,4 +1,4 @@
-﻿namespace GameAPI.Models
+﻿namespace GameAPI.Data.RAWG
 {
     public class GameResponse
     {

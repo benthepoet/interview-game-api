@@ -1,5 +1,5 @@
-using GameAPI.Models.DTOs;
 using GameAPI.Services;
+using GameAPI.Services.DTOs;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

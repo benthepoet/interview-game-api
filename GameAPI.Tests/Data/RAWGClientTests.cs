@@ -1,4 +1,4 @@
-using GameAPI.Data;
+using GameAPI.Data.RAWG;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GameAPI.Tests

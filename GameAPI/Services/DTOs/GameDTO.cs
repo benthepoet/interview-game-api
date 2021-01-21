@@ -1,4 +1,4 @@
-namespace GameAPI.Models.DTOs
+namespace GameAPI.Services.DTOs
 {
     public class GameDTO
     {

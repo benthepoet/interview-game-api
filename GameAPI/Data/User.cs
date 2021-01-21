@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GameAPI.Models
+namespace GameAPI.Data
 {
     public class User
     {
