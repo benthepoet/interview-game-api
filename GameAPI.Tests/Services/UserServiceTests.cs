@@ -21,13 +21,13 @@ namespace GameAPI.Tests.Services
             var user1 = new User
             {
                 Id = 1,
-                GameIds = new HashSet<int> { 16, 32, 48, 64 }
+                GameIds = new HashSet<int> { 16, 32, 48 }
             };
 
             var user2 = new User
             {
                 Id = 2,
-                GameIds = new HashSet<int> { 32, 48, 72, 96 }
+                GameIds = new HashSet<int> { 32, 48, 72 }
             };
 
             var userRepository = new Mock<IUserRepository>();
@@ -65,10 +65,37 @@ namespace GameAPI.Tests.Services
         }
 
         [TestMethod]
+        public async Task GetComparison_Difference_ReturnsUniqueOnOther()
+        {
+            var comparison = await userService.GetComparison(1, 2, "difference");
+            var gameIds = comparison.Games.Select(x => x.GameId).ToArray();
+
+            Assert.IsTrue(gameIds.Length == 1);
+            Assert.IsNotNull(gameIds.Contains(72));
+        }
+
+        [TestMethod]
+        public async Task GetComparison_Intersection_ReturnsBoth()
+        {
+            var comparison = await userService.GetComparison(1, 2, "intersection");
+            var gameIds = comparison.Games.Select(x => x.GameId).ToArray();
+
+            Assert.IsTrue(gameIds.Length == 2);
+            Assert.IsNotNull(gameIds.Contains(32));
+            Assert.IsNotNull(gameIds.Contains(48));
+        }
+
+        [TestMethod]
         public async Task GetComparison_Union_ReturnsBoth()
         {
             var comparison = await userService.GetComparison(1, 2, "union");
-            Assert.IsNotNull(comparison.Games.FirstOrDefault(x => x.GameId == 48));
+            var gameIds = comparison.Games.Select(x => x.GameId).ToArray();
+
+            Assert.IsTrue(gameIds.Length == 4);
+            Assert.IsNotNull(gameIds.Contains(16));
+            Assert.IsNotNull(gameIds.Contains(32));
+            Assert.IsNotNull(gameIds.Contains(48));
+            Assert.IsNotNull(gameIds.Contains(72));
         }
     }
 }
