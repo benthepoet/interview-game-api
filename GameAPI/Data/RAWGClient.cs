@@ -103,7 +103,7 @@ namespace GameAPI.Data
             {
                 if (!IsSortValid(sort))
                 {
-                    throw new InvalidParameterException($"'{sort}' is not a valid sort parameter");
+                    throw new ArgumentException($"'{sort}' is not a valid sort parameter");
                 }
 
                 uri += $"&ordering={sort}";

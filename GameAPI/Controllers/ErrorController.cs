@@ -16,7 +16,7 @@ namespace GameAPI.Controllers
             {
                 DuplicateEntityException _ => HttpStatusCode.Conflict,
                 EntityNotFoundException _ => HttpStatusCode.NotFound,
-                InvalidParameterException _ => HttpStatusCode.BadRequest,
+                ArgumentException _ => HttpStatusCode.BadRequest,
                 _ => HttpStatusCode.InternalServerError
             };
 

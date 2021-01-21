@@ -1,6 +1,7 @@
 ﻿using GameAPI.Data;
 using GameAPI.Exceptions;
 using GameAPI.Models.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace GameAPI.Services
 
             if (game == null)
             {
-                throw new InvalidParameterException($"Game {gameId} does not exist.");
+                throw new ArgumentException($"Game {gameId} does not exist.");
             }
 
             if (user.GameIds.Contains(gameId))
@@ -94,7 +95,7 @@ namespace GameAPI.Services
 
             if (otherUser == null)
             {
-                throw new InvalidParameterException($"Other user {otherUserId} does not exist.");
+                throw new ArgumentException($"Other user {otherUserId} does not exist.");
             }
 
             // Create a new hash set for output as the methods below mutate the data structure
@@ -118,7 +119,7 @@ namespace GameAPI.Services
                     break;
 
                 default:
-                    throw new InvalidParameterException($"'{comparison}' is not a valid comparison.");
+                    throw new ArgumentException($"'{comparison}' is not a valid comparison.");
             }
 
             var games = await ConvertGameIdsToGameDTOs(gameIds);
