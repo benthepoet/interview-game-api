@@ -1,5 +1,6 @@
 ﻿using GameAPI.Data.RAWG;
 using GameAPI.Services.DTOs;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,7 +41,7 @@ namespace GameAPI.Services
             return ConvertToGameDTO(game);
         }
 
-        public async Task<GameDTO[]> ListGames(string search, string sort)
+        public async Task<IEnumerable<GameDTO>> ListGames(string search, string sort)
         {
             var gameList = await _client.ListGames(search, sort);
 

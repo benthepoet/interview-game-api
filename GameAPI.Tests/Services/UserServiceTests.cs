@@ -32,11 +32,11 @@ namespace GameAPI.Tests.Services
             var userRepository = new Mock<IUserRepository>();
             
             userRepository
-                .Setup(x => x.GetUser(1))
+                .Setup(x => x.GetUser(user1.Id))
                 .Returns(user1);
 
             userRepository
-                .Setup(x => x.GetUser(2))
+                .Setup(x => x.GetUser(user2.Id))
                 .Returns(user2);
             
             var gameService = new Mock<IGameService>();

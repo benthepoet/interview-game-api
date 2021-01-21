@@ -20,10 +20,10 @@ namespace GameAPI.Data
                 GameIds = new HashSet<int>()
             };
 
-            _storage[user.Id] = user;
+            _storage[user.Id] = user.Clone();
             _nextKey++;
 
-            return user.Clone();
+            return user;
         }
 
         public User GetUser(int id)

@@ -52,7 +52,7 @@ namespace GameAPI.Data.RAWG
 
             _httpClient = httpClient;
 
-            // Build a basic retry policy
+            // Build a basic retry policy for request failures
             var retryPolicy = Policy
                 .Handle<HttpRequestException>()
                 .WaitAndRetryAsync(new [] { 
@@ -119,6 +119,7 @@ namespace GameAPI.Data.RAWG
 
         public static bool IsSortValid(string sort) 
         {
+            // Use a pattern to check that the string follows the ascending/descending convention
             var pattern = @"^[-]*(?<field>\w+)$";
             var regex = new Regex(pattern);
 

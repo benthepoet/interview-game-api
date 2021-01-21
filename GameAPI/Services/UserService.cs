@@ -151,10 +151,10 @@ namespace GameAPI.Services
             };
         }
 
-        private async Task<List<GameDTO>> ConvertGameIdsToGameDTOs(HashSet<int> gameIds)
+        private async Task<IEnumerable<GameDTO>> ConvertGameIdsToGameDTOs(HashSet<int> gameIds)
         {
             var games = new List<GameDTO>();
-
+            
             foreach (var gameId in gameIds)
             {
                 games.Add(await _gameService.GetGame(gameId));
