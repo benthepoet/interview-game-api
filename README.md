@@ -39,5 +39,17 @@ in memory. The default TTL (time-to-live) for cached game details is 10 minutes.
 ```
 
 ## Running the Project
+
+### Visual Studio
 To run the project, open the `GameAPI.sln` solution file in Visual Studio and then from the menu select `Debug -> Start Debugging`.
 A browser should then open and display a welcome message.
+
+### Command Line
+The project can also be run directly from the command line if desired by executing the following command from the root folder where 
+the solution file resides.
+
+```shell
+dotnet run --project .\GameAPI\GameAPI.csproj
+```
+
+Note that running the project this way will not automatically launch a browser.
