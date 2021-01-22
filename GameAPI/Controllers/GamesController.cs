@@ -17,17 +17,10 @@ namespace GameAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetGames([FromQuery] GetGamesRequest gamesRequest)
+        public async Task<IActionResult> GetGames([Required] string q, string sort)
         {
-            var games = await _service.ListGames(gamesRequest.q, gamesRequest.sort);
+            var games = await _service.ListGames(q, sort);
             return Ok(games);
-        }
-
-        public class GetGamesRequest 
-        {
-            [Required]
-            public string q { get; set; }
-            public string sort { get; set; }
         }
     }
 }

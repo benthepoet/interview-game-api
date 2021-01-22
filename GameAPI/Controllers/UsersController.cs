@@ -36,7 +36,7 @@ namespace GameAPI.Controllers
         public async Task<IActionResult> PostUserGame(int userId, 
             [FromBody] PostGameRequest gameRequest)
         {
-            await _service.AddGame(userId, gameRequest.GameId.Value);
+            await _service.AddGame(userId, gameRequest.gameId.Value);
 
             return NoContent();
         }
@@ -53,21 +53,21 @@ namespace GameAPI.Controllers
         public async Task<UserComparisonDTO> PostUserComparison(int userId, 
             [FromBody] PostUserComparisonRequest comparisonRequest)
         {
-            return await _service.GetComparison(userId, comparisonRequest.OtherUserId.Value, comparisonRequest.Comparison);
+            return await _service.GetComparison(userId, comparisonRequest.otherUserId.Value, comparisonRequest.comparison);
         } 
 
         public class PostGameRequest
         {
             [Required]
-            public int? GameId { get; set; }
+            public int? gameId { get; set; }
         }
 
         public class PostUserComparisonRequest
         {
             [Required]
-            public int? OtherUserId { get; set; }
+            public int? otherUserId { get; set; }
             [Required]
-            public string Comparison { get; set; }
+            public string comparison { get; set; }
         }
     }
 }
