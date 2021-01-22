@@ -75,7 +75,7 @@ namespace GameAPI.Services
 
             if (!user.GameIds.Contains(gameId))
             {
-                throw new EntityNotFoundException($"Game {userId} is not in the user's list.");
+                throw new EntityNotFoundException($"Game {gameId} is not in the user's list.");
             }
 
             user.GameIds.Remove(gameId);

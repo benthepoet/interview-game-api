@@ -1,5 +1,6 @@
 ﻿using GameAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace GameAPI.Controllers
@@ -16,15 +17,17 @@ namespace GameAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetGames(string q, string sort)
+        public async Task<IActionResult> GetGames([FromQuery] GetGamesRequest gamesRequest)
         {
-            if (string.IsNullOrEmpty(q))
-            {
-                return BadRequest("The 'q' parameter is required and cannot be empty.");
-            }
-
-            var games = await _service.ListGames(q, sort);
+            var games = await _service.ListGames(gamesRequest.q, gamesRequest.sort);
             return Ok(games);
+        }
+
+        public class GetGamesRequest 
+        {
+            [Required]
+            public string q { get; set; }
+            public string sort { get; set; }
         }
     }
 }

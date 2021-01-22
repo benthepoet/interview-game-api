@@ -9,7 +9,7 @@ namespace GameAPI.Data
 
         public UserRepository()
         {
-            _nextKey = 0;
+            _nextKey = 1;
             _storage = new Dictionary<int, User>();
         }
 
